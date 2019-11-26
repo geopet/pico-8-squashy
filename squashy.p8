@@ -10,6 +10,13 @@ pady=122
 padw=24
 padh=4
 
+-- ball
+ballx=64
+bally=64
+ball_size=3
+ballx_dir=5
+bally_dir=-3
+
 function _update()
   move_paddle()
 end
@@ -20,6 +27,9 @@ function _draw()
 
   -- draw the paddle
   rectfill(padx,pady,padx+padw,pady+padh,15)
+
+  -- draw the ball
+  circfill(ballx,bally,ball_size,15)
 end
 
 function move_paddle()
