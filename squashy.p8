@@ -19,6 +19,7 @@ bally_dir=-3
 
 function _update()
   move_paddle()
+  move_ball()
 end
 
 function _draw()
@@ -38,6 +39,11 @@ function move_paddle()
   elseif btn(1) then
     padx+=3
   end
+end
+
+function move_ball()
+  ballx+=ballx_dir
+  bally+=bally_dir
 end
 
 __gfx__
