@@ -3,28 +3,39 @@ version 18
 __lua__
 -- squashy tutorial
 -- by geopet (geoff petrie)
--- paddle
-padx=52
-pady=122
-padw=24
-padh=4
 
--- ball
-ballx=64
-bally=64
-ball_size=3
-ballx_dir=5
-bally_dir=-3
+function _init()
+  -- paddle
+  pad={}
+  pad.x=52
+  pad.y=122
+  pad.w=24
+  pad.h=4
 
-score=0
-lives=3
+  -- ball
+  ball={}
+  ball.x=64
+  ball.y=64
+  ball.size=3
+  ball.dx=5
+  ball.dy=-3
+
+  game={}
+  game.score=0
+  game.lives=3
+  game.over=false
+end
 
 function _update()
-  move_paddle()
-  bounce_ball()
-  bounce_paddle()
-  move_ball()
-  lose_deadball()
+  if (not game.over) then
+    move_paddle()
+    bounce_ball()
+    bounce_paddle()
+    move_ball()
+    lose_deadball()
+  else
+    game_over()
+  end
 end
 
 function _draw()
@@ -32,76 +43,82 @@ function _draw()
   rectfill(0,0,128,128,3)
 
   -- draw the lives
-  for i=1,lives do
+  for i=1,game.lives do
     spr(4,90+i*8,4)
   end
 
   -- draw the score
-  print(score,12,6,15)
+  print(game.score,12,6,15)
+  if (game.over) then
+    print("game over",12,12,15)
+  end
 
   -- draw the paddle
-  rectfill(padx,pady,padx+padw,pady+padh,15)
+  rectfill(pad.x,pad.y,pad.x+pad.w,pad.y+pad.h,15)
 
   -- draw the ball
-  circfill(ballx,bally,ball_size,15)
+  circfill(ball.x,ball.y,ball.size,15)
 end
 
 function move_paddle()
   if btn(0) then
-    padx-=3
+    pad.x-=3
   elseif btn(1) then
-    padx+=3
+    pad.x+=3
   end
 end
 
 function move_ball()
-  ballx+=ballx_dir
-  bally+=bally_dir
+  ball.x+=ball.dx
+  ball.y+=ball.dy
 end
 
 function lose_deadball()
-  if bally>128-ball_size then
-    if lives>0 then
-      -- next life
-      sfx(3)
-      bally=24
-      lives-=1
-    else
-      -- game over
-      bally_dir=0
-      ballx_dir=0
-      bally=64
+  if ball.y>128-ball.size then
+    -- next life
+    sfx(3)
+    ball.y=24
+    game.lives-=1
+
+    if game.lives==0 then
+      game.over=true
     end
   end
 end
 
 function bounce_ball()
   -- left
-  if ballx<ball_size then
-    ballx_dir=-ballx_dir
+  if ball.x<ball.size then
+    ball.dx=-ball.dx
     sfx(0)
   end
 
   -- right
-  if ballx>128-ball_size then
-    ballx_dir=-ballx_dir
+  if ball.x>128-ball.size then
+    ball.dx=-ball.dx
     sfx(0)
   end
 
   -- top
-  if bally<ball_size then
-    bally_dir=-bally_dir
+  if ball.y<ball.size then
+    ball.dy=-ball.dy
     sfx(0)
   end
 end
 
 function bounce_paddle()
-  if ballx>=padx and ballx<=padx+padw and bally>pady then
+  if ball.x>=pad.x and ball.x<=pad.x+pad.w and ball.y>pad.y then
     sfx(1)
     -- increase score on hit
-    score+=10
-    bally_dir=-bally_dir
+    game.score+=10
+    ball.dy=-ball.dy
   end
+end
+
+function game_over()
+  ball.dy=0
+  ball.dx=0
+  ball.y=64
 end
 
 __gfx__
