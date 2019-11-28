@@ -16,6 +16,8 @@ ball_size=3
 ballx_dir=5
 bally_dir=-3
 
+score=0
+
 function _update()
   move_paddle()
   bounce_ball()
@@ -27,6 +29,9 @@ end
 function _draw()
   -- clear the screen
   rectfill(0,0,128,128,3)
+
+  -- draw the score
+  print(score,12,6,15)
 
   -- draw the paddle
   rectfill(padx,pady,padx+padw,pady+padh,15)
@@ -78,6 +83,8 @@ end
 function bounce_paddle()
   if ballx>=padx and ballx<=padx+padw and bally>pady then
     sfx(1)
+    -- increase score on hit
+    score+=10
     bally_dir=-bally_dir
   end
 end
