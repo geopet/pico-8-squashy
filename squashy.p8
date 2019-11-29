@@ -107,7 +107,7 @@ function bounce_ball()
 end
 
 function bounce_paddle()
-  if ball.x>=pad.x and ball.x<=pad.x+pad.w and ball.y>pad.y then
+  if ball.x>=pad.x and ball.x<=pad.x+pad.w and ball.y+ball.size>pad.y then
     sfx(1)
     -- increase score on hit
     game.score+=10
