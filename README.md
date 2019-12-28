@@ -1,6 +1,6 @@
 # README
 
-## Lander
+## Squashy
 
 ![squashy game play](images/squashy.gif)
 
